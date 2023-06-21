@@ -41,7 +41,7 @@
                 @endforeach
             </tbody>
         </table>
-        <a href="/matkul" class="btn btn-light">Lihat Mata Kuliah</a>
+        <a href="/" class="btn btn-light">Kembali</a>
     
     </div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

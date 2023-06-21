@@ -29,15 +29,15 @@
                     <td>{{ $data->kode_matkul }}</td>
                     <td>{{ $data->mata_kuliah }}</td>
                     <td>
-                        <a href="/edit/{{ $data->nim }}" class="btn btn-warning">Update</a>
-                        <a href="/delete/{{ $data->nim }}" class="btn btn-danger">Delete</a>
-                        <a href="/cetak-laporan" class="btn btn-primary">Cetak Laporan</a>
+                        <a href="/edit_matkul/{{ $data->kode_matkul }}" class="btn btn-warning">Update</a>
+                        <a href="/delete_matkul/{{ $data->kode_matkul }}" class="btn btn-danger">Delete</a>
+                        {{-- <a href="/cetak-laporan" class="btn btn-primary">Cetak Laporan</a> --}}
                     </td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
-        <a href="/mhs" class="btn btn-light">Kembali</a>
+        <a href="/" class="btn btn-light">Kembali</a>
     </div>
    
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

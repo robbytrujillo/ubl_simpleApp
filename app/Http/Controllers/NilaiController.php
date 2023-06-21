@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\NilaiMahasiswa;
+use App\Models\MatkulModel;
+use App\Models\NilaiModel;
 use PDF;
 use Excel;
 
@@ -11,102 +12,44 @@ class NilaiController extends Controller
 {
     public function index()
     {
-        $data = [
-            'nilai' => NilaiMahasiswa::all()
-        ];
-        return view('nilai.index', $data);
+        $nilaimhs = NilaiMahasiswa::all();
+        $matkul = MatkulModel::all();
+    
+        return view('nilaimhs_v', compact('nilaimhs', 'matkul'));
     }
-
-    public function create()
+    public function cetakLaporan(Request $request)
     {
-        return view('nilai.create');
-    }
+        $kodeMatkul = $request->input('kode_matkul');
+        $outputType = $request->input('output_type');
 
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'nim' => 'required',
-            'nama' => 'required',
-            'matakuliah' => 'required',
-            'tugas' => 'required|numeric',
-            'uts' => 'required|numeric',
-            'uas' => 'required|numeric',
-        ]);
+        $matkul = MatkulModel::where('kode_matkul', $kodeMatkul)->first();
 
-        $nilai = new NilaiMahasiswa();
-        $nilai->nim = $request->nim;
-        $nilai->nama = $request->nama;
-        $nilai->matakuliah = $request->matakuliah;
-        $nilai->tugas = $request->tugas;
-        $nilai->uts = $request->uts;
-        $nilai->uas = $request->uas;
-        $nilai->save();
+        if ($matkul) {
+            $dataNilai = NilaiModel::where('kode_matkul', $kodeMatkul)->get();
 
-        return redirect()->route('nilai.index')->with('success', 'Data nilai berhasil ditambahkan.');
-    }
+            if ($outputType == 'pdf') {
+                $pdf = PDF::loadView('laporan_nilai_pdf', compact('mata_kuliahs', 'dataNilai'));
+                return $pdf->download($kodeMatkul . '.pdf');
+            } elseif ($outputType == 'xls') {
+                $data = [];
+                foreach ($dataNilai as $index => $nilai) {
+                    $data[$index]['No'] = $index + 1;
+                    $data[$index]['NIM'] = $nilai->nim;
+                    $data[$index]['Nama'] = $nilai->mahasiswa->nama;
+                    $data[$index]['Tugas'] = $nilai->tugas;
+                    $data[$index]['UTS'] = $nilai->uts;
+                    $data[$index]['UAS'] = $nilai->uas;
+                    $data[$index]['Nilai Akhir'] = $nilai->nilai_akhir;
+                    $data[$index]['Grade'] = $nilai->grade;
+                }
 
-    public function cetak(Request $request)
-    {
-        $this->validate($request, [
-            'matakuliah' => 'required',
-            'output' => 'required',
-        ]);
-
-        $matakuliah = $request->matakuliah;
-        $output = $request->output;
-
-        $nilai = NilaiMahasiswa::where('matakuliah', $matakuliah)->get();
-
-        $data = [
-            'matakuliah' => $matakuliah,
-            'nilai' => $nilai,
-        ];
-
-        if ($output == 'pdf') {
-            $pdf = PDF::loadView('nilai.pdf', $data);
-            return $pdf->download('laporan_nilai.pdf');
-        } elseif ($output == 'xls') {
-            Excel::create('laporan_nilai', function ($excel) use ($data) {
-                $excel->sheet('Sheet 1', function ($sheet) use ($data) {
-                    $sheet->loadView('nilai.xls', $data);
-                });
-            })->download('xls');
+                return Excel::download(new \App\Exports\NilaiExport($data), $kodeMatkul . '.xls');
+            }
         }
+
+        return redirect()->back()->with('message', 'Data tidak ditemukan.');
     }
 
-    public function show($nim)
-    {
-        
-        $nilai = [
-            [
-                'matakuliah' => 'RPL',
-                'nim' => $nim,
-                'nama' => 'Budi',
-                'tugas' => 85,
-                'uts' => 80,
-                'uas' => 90,
-                'nilai_akhir' => 87,
-                'grade' => 'A'
-            ],
-            [
-                'matakuliah' => 'Algoritma',
-                'nim' => $nim,
-                'nama' => 'Luhur',
-                'tugas' => 75,
-                'uts' => 85,
-                'uas' => 70,
-                'nilai_akhir' => 77,
-                'grade' => 'B+'
-            ]
-        ];
 
-        // Tampilkan tampilan cetak laporan nilai
-        return view('cetak_laporan_nilai', compact('nilai'));
-    }
-
-    public function cetakLaporan()
-{
-    return view('nilai.cetak_laporan_nilai');
-}
 
 }

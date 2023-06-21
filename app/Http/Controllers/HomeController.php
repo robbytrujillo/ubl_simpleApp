@@ -14,7 +14,11 @@ class HomeController extends Controller {
         $data = [
             'mhs'=>$this->MhsModel->allData()
         ];
-        return view('mhs_v', $data);
+        return view('index_v', $data);
+    }
+
+    public function mhs() {
+        return view('mhs_v');
     }
 
     public function add() {
@@ -52,6 +56,8 @@ class HomeController extends Controller {
         //return redirect()->to('/')->send()->with('message', 'Data '.$id.' Berhasil dihapus');
         return redirect('/')->with('message', 'Data '.$id.' Berhasil dihapus');
     }
+
+    
 }
 
 ?>

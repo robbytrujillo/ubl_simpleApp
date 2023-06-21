@@ -22,6 +22,12 @@ use App\Http\Controllers\MatkulController;
 
 Route::get('/', [HomeController::class, 'index']);
 
+Route::get('/mahasiswa', function () {
+    $mhs = App\Models\mahasiswa::all(); // Ganti dengan model dan data yang sesuai
+    
+    return view('mhs_v', ['mhs' => $mhs]);
+});
+
 Route::get('/add', [HomeController::class, 'add']);
 
 Route::post('/insert', [HomeController::class, 'insert']);
@@ -34,6 +40,7 @@ Route::get('/delete/{id}', [HomeController::class, 'delete']);
 
 Route::view('/hello', 'hello_v', ['nama' => 'Budi', 'alamat' => 'Jakarta']);
 
+// nilaiController
 Route::resource('nilai', NilaiController::class);
 
 Route::post('nilai/cetak', [NilaiController::class, 'cetak'])->name('nilai.cetak');
@@ -45,14 +52,35 @@ Route::get('/cetak-laporan', 'NilaiController@cetakLaporan');
 Route::get('/cetak-laporan', [NilaiController::class, 'cetakLaporan'])->name('cetak.laporan');
 
 // MatkulController
-Route::get('/add', [MatkulController::class, 'add']);
+Route::get('/matkul', function () {
+    $matkul = App\Models\MataKuliah::all(); // Ganti dengan model dan data yang sesuai
+    
+    return view('matkul_v', ['matkul' => $matkul]);
+});
 
-Route::post('/insert', [MatkulController::class, 'insert']);
+Route::get('/add_matkul', [MatkulController::class, 'add_matkul']);
 
-Route::get('/edit/{id}', [MatkulController::class, 'edit']);
+Route::post('/insert_matkul', [MatkulController::class, 'insert_matkul']);
 
-Route::post('/update/{id}', [MatkulController::class, 'update']);
+Route::get('/edit_matkul/{id}', [MatkulController::class, 'edit_matkul']);
 
-Route::get('/delete/{id}', [MatkulController::class, 'delete']);
+Route::post('/update_matkul/{id}', [MatkulController::class, 'update_matkul']);
 
+Route::get('/delete_matkul/{id}', [MatkulController::class, 'delete_matkul']);
 
+// NilaiController
+Route::get('/nilaimhs', function () {
+    $nilaimhs = App\Models\MataKuliah::all(); // Ganti dengan model dan data yang sesuai
+    
+    return view('nilaimhs_v', ['nilaimhs' => $nilaimhs]);
+});
+
+Route::get('/add_nilaimhs', [NilaiController::class, 'add_nilaimhs']);
+
+Route::post('/insert_nilaimhs', [NilaiController::class, 'insert_nilaimhs']);
+
+Route::get('/edit_nilaimhs/{id}', [NilaiController::class, 'edit_nilaimhs']);
+
+Route::post('/update_nilaimhs/{id}', [NilaiController::class, 'update_nilaimhs']);
+
+Route::get('/delete_nilaimhs/{id}', [NilaiController::class, 'delete_nilaimhs']);

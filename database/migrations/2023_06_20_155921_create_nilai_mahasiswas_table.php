@@ -21,6 +21,7 @@ return new class extends Migration
             $table->bigInteger('tugas');
             $table->bigInteger('uts');
             $table->bigInteger('uas');
+            $table->string('grade');
 
 
             $table->softDeletes();

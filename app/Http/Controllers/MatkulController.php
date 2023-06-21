@@ -17,35 +17,35 @@ class MatkulController extends Controller {
         return view('matkul_v', $data);
     }
 
-    public function add() {
+    public function add_matkul() {
         return view('add_matkul_v');
     }
 
-    public function insert() {
+    public function insert_matkul() {
         $data = [
             'kode_matkul' => Request() -> vKODEMATKUL,
             'mata_kuliah' => Request() -> vMATAKULIAH,
         ];
         $this->MatkulModel->addData($data);
-        return redirect()->to('/')->send()->with('message', 'Data '.Request()->vKODEMATKUL.' Berhasil ditambah');
+        return redirect()->to('/matkul')->send()->with('message', 'Data '.Request()->vKODEMATKUL.' Berhasil ditambah');
     }
 
-    public function edit($id) {
+    public function edit_matkul($id) {
         $data = ['matkul'=>$this->MatkulModel->getData($id)];
         return view('edit_matkul_v', $data);
     }
 
-    public function update(Request $request, $id) {
+    public function update_matkul(Request $request, $id) {
         $data = [
             'kode_matkul' => $request->input('vKODEMATKUL'),
             'mata_kuliah' => $request->input('vMATAKULIAH'),
             ];
         $this->MatkulModel->updateData($id, $data);
         //return redirect()->to('/')->send()->with('message', 'Data '.$id.' Berhasil diupdate');
-        return redirect('/')->with('message', 'Data '.$id.' Berhasil diupdate');
+        return redirect('/matkul')->with('message', 'Data '.$id.' Berhasil diupdate');
     }
 
-    public function delete($id) {
+    public function delete_matkul($id) {
         $this->MatkulModel->deleteData($id);
         //return redirect()->to('/')->send()->with('message', 'Data '.$id.' Berhasil dihapus');
         return redirect('/')->with('message', 'Data '.$id.' Berhasil dihapus');

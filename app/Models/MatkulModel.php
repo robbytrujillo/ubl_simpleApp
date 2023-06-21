@@ -33,4 +33,7 @@ class MatkulModel extends Model
                     ->where('kode_matkul', $id)
                     ->delete();
     }
+
+    protected $table = 'mata_kuliahs';
+    protected $primaryKey = 'id';
 }
