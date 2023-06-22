@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\MatkulModel;
-use App\Models\NilaiModel;
+use App\Models\NilaiMahasiswa;
 use PDF;
 use Excel;
 
@@ -25,7 +25,7 @@ class NilaiController extends Controller
         $matkul = MatkulModel::where('kode_matkul', $kodeMatkul)->first();
 
         if ($matkul) {
-            $dataNilai = NilaiModel::where('kode_matkul', $kodeMatkul)->get();
+            $dataNilai = NilaiMahasiswa::where('kode_matkul', $kodeMatkul)->get();
 
             if ($outputType == 'pdf') {
                 $pdf = PDF::loadView('laporan_nilai_pdf', compact('mata_kuliahs', 'dataNilai'));

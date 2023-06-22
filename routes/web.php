@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\MatkulController;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,3 +85,13 @@ Route::get('/edit_nilaimhs/{id}', [NilaiController::class, 'edit_nilaimhs']);
 Route::post('/update_nilaimhs/{id}', [NilaiController::class, 'update_nilaimhs']);
 
 Route::get('/delete_nilaimhs/{id}', [NilaiController::class, 'delete_nilaimhs']);
+
+//login
+
+
+
+Route::get('/login', function () {
+    return view('login');
+});
+
+Route::post('/login', [LoginController::class, 'login']);
